@@ -1,0 +1,29 @@
+To install the development version of the ptcn package from GitHub, please clone the repo and perform the following steps:
+
+Install Python <=3.7 (https://www.python.org/downloads/release/python-3710/) and Anaconda (https://docs.anaconda.com/anaconda/install/). 
+
+Open the Anaconda terminal or local machines terminal. 
+If you choose your local machine make sure to change the directory to the pathway of your python.exe to ensure any modules installed are directed properly. 
+Install the following modules: 
+
+* pip install tensorflow==1.15 or conda install tensorflow==1.15
+* pip install keras
+* pip install re
+* pip install nltk & nltk.download('punkt')
+* pip install os
+* pip install pandas
+* pip install numpy
+* pip install stop_words
+* pip install sklearn
+
+Optionally you can unsleep the lines #() in script 'install.packages.r' to install the modules in python because the package reticulate enables the connection between R and Python to communicate commands.  
+
+Install R <=3.5 and Rstudio. 
+To Install R  <=3.5 follow the link https://cran.r-project.org/bin/ and select the correct OS from the directory lists on the webpage. Locate a version 3.5 or less and install it. 
+
+* https://cran.r-project.org/bin/windows/base/old/3.5.0/
+* https://cran.r-project.org/bin/macosx/R-3.3.3.pkg
+
+Open a R session and set the working directory to the cloned folder. 
+Open the 'install.packages.r' script to install the dependency packages for the course. 
+Note, some of the packages will be installed from source files stored in the 'packages' folder.
