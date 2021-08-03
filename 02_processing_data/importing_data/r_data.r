@@ -1,0 +1,9 @@
+# - Importing Data From R Libraries ----
+
+#install.packages("datasets")
+ls("package:datasets")
+
+
+library(datasets) # load the library...
+data(mtcars) # import the data into the R enviroment...
+head(mtcars) # peak at the first 6 rows of the data...
