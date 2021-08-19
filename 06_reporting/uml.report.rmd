@@ -1,0 +1,284 @@
+---
+title: Machine Learning Sample
+  Learning
+author: "HU - J.Korn"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r message=FALSE, warning=FALSE, include=FALSE}
+setwd("C:/Users/Jonathan Korn/Desktop/cu_hsp-learning/09_reporting")
+```
+
+## Load Libraries, Import Data, and Correlation {.tabset}
+
+### Load Libraries 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(readxl)
+library(caret)
+library(rattle)
+library(party)
+library(ggpubr)
+library(quantmod)
+```
+
+Here is the list of all the required libraries. 
+Download all the libraries before running the code. 
+
+### Import Data 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+start <- as.Date(Sys.Date()-(365*5)) # start date. 
+end <- as.Date(Sys.Date()) # current date. 
+getSymbols("GOOG", src = "yahoo", from = start, to = end) # Feed symbol from s&p500. 
+data = data.frame(GOOG) # call xts object into env. 
+colnames(data) = c("Open", "High", "Low", "Close", "Volume", "Adjusted") # set column names in xts object. 
+str(data)
+```
+
+### Remove Unnecessary Variables 
+```{r}
+dataset = data[,-c(5,6)]
+str(dataset)
+```
+
+### Check for Missing or NA Values {.tabset}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+apply(dataset,2,function(x) sum(is.na(x)))#Check for Missing...
+dataset = na.omit(dataset)
+summary(dataset)
+```
+
+### Scatterplot Matrix
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(GGally)
+sp = ggpairs(dataset)
+sp
+```
+
+## Train Models {.tabset}
+
+### Modeling Parameters 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+control <- trainControl(method="cv", number=10)
+metric <- c("RMSE")
+set.seed(7)
+```
+
+### Train Models
+
+- Regression 
+- Random Forest 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(7)
+fit.OLS <- train(Close~., data = dataset, method="lm", metric=metric, trControl=control) #OLS
+set.seed(7)
+fit.rf <- train(Close~., data = dataset, method="rf", metric=metric, trControl=control, #random forest 
+               importance=T)
+```
+
+### Summary Results 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+results = resamples(list(OLS= fit.OLS, rf = fit.rf))
+summary(results)
+```
+
+### Summary Plots
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+dp = dotplot(results)
+dp
+bwp = bwplot(results)
+bwp
+```
+
+## Regression Results {.tabset}
+
+### Summary Results
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(fit.OLS$resample)
+```
+
+### Mean of Different Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.OLS$results)
+```
+
+### Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.OLS$resample)
+```
+
+### Predictions Results 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+predictions = predict(fit.OLS, dataset[,-4])
+postResample(pred = predictions, obs = dataset$Close)
+```
+
+### Variable Importance
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+importance <- varImp(fit.OLS, scale=TRUE)
+# summarize importance
+print(importance)
+# plot importance
+vi.OLS = plot(importance)
+vi.OLS
+```
+
+
+## Random Forest Results {.tabset}
+
+### Summary Results
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(fit.rf$resample)
+```
+
+### Mean of Different Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.rf$results)
+```
+
+### Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.rf$resample)
+```
+
+### Predictions
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#Estimate Skill of a model using the Validation Set
+predictions = predict(fit.rf, dataset[,-4])
+postResample(pred = predictions, obs = dataset$Close)
+```
+
+### Variable Importance
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+importance <- varImp(fit.rf, scale=TRUE)
+# summarize importance
+print(importance)
+# plot importance
+vi.rf = plot(importance)
+vi.rf
+```
+
+
+## Regression with Significant Variables - Results {.tabset}
+
+### Train on Significant Variables
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+fit.OLS.r <- train(Close~High+Low, data = dataset, method="lm", metric=metric, trControl=control, #random forest 
+               importance=T)
+```
+
+### Summary Results
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(fit.OLS.r$resample)
+```
+
+### Mean of Different Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.OLS.r$results)
+```
+
+### Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.OLS.r$resample)
+```
+
+### Predictions
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#Estimate Skill of a model using the Validation Set
+predictions = predict(fit.OLS.r, dataset[,-4])
+postResample(pred = predictions, obs = dataset$Close)
+```
+
+### Variable Importance
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+importance <- varImp(fit.OLS.r, scale=TRUE)
+# summarize importance
+print(importance)
+# plot importance
+vi.OLS.r = plot(importance)
+vi.OLS.r
+```
+
+
+### Training on the Whole Dataset
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+lm = coef(lm(Close~High + Low, data = dataset)) #Same as running using caret with no control parameters...
+summary(lm)
+```
+
+### Plot
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+fmp.1 = plot(fit.OLS.r$finalModel,1) #same as the above,,,
+fmp.2 = plot(fit.OLS.r$finalModel,2)
+fmp.3 = plot(fit.OLS.r$finalModel,3)
+fmp.4 = plot(fit.OLS.r$finalModel,4)
+```
+
+## Random Forest With Significant Variables - Results {.tabset}
+
+### Train on Significant Variables
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+fit.rf.r <- train(Close~High + Low, data = dataset, method="rf", metric=metric, trControl=control, #random forest 
+               importance=T)
+```
+
+### Summary Results
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(fit.rf.r$resample)
+```
+
+### Mean of Different Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.rf.r$results)
+```
+
+### Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.rf.r$resample)
+```
+
+### Predictions 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#Estimate Skill of a model using the Validation Set
+predictions = predict(fit.rf.r, dataset[,-4])
+postResample(pred = predictions, obs = dataset$Close)
+```
+
+### Variable Importance
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+importance <- varImp(fit.rf.r, scale=TRUE)
+# summarize importance
+print(importance)
+# plot importance
+vi.rf.r = plot(importance)
+vi.rf.r
+```
+
+### Forest Plot
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+fmp2 = plot(fit.rf.r$finalModel)
+```
+
+## Project Summary Plots {.tabset}
+
+### Scatterplot Matrix
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sp
+```
+
+### Training Summary Plots
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggarrange(dp, bwp, 
+          labels = c("Training Models Summary Results"),
+          ncol = 2, nrow = 1)
+```
+
+### VI Comparison Plot
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggarrange(vi.OLS, vi.rf, vi.OLS.r, vi.rf.r, 
+          labels = c("LM Original", 
+                     "RF Original", 
+                     "LM Significant", 
+                     "RF Significant"),
+          ncol = 2, nrow = 2)
+```

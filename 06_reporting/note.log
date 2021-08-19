@@ -1,0 +1,4 @@
+- Create Rmarkdown generated documents in pdf, html, word format. 
+- Create Rmarkdown presentations in pdf, html (ioslides, slidy), or powerpoint format. 
+- Create reports in Jupyter Notebooks. 
+- Use tfruns to automate reporting. 
