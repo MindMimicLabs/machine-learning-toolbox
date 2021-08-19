@@ -2,7 +2,7 @@
 
 A toolbox of code in R and Python to complete classical machine learning and deep learning projects for structured and unstructured data problems. 
 
-The repository includes:
+**The repository includes:**
 
 (1) Prepare Tools 
 
