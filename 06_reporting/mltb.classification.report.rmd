@@ -1,0 +1,248 @@
+---
+title: Machine Learning Toolbox Classification Report
+author: "J.W.Korn"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Load Libraries, Import Data, and Correlation {.tabset}
+
+### Load Libraries 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(readxl)
+library(caret)
+library(rattle)
+library(party)
+library(ggpubr)
+library(magrittr)
+library(datasets)
+library(mice)
+library(outlieR)
+library(AppliedPredictiveModeling)
+```
+
+Here is the list of all the required libraries. 
+Download all the libraries before running the code. 
+
+### Import Data 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data <- iris
+str(data)
+```
+
+### Remove Unnecessary Variables 
+```{r}
+dataset = data
+str(dataset)
+```
+
+### Missing and Outliers  {.tabset}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+apply(dataset,2,function(x) sum(is.na(x)))#Check for Missing...
+dataset = na.omit(dataset)
+summary(dataset)
+```
+
+### Impute for Missing or NA Values
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+missing = dataset %>% mice::mice(m=5,maxit=50,meth="sample",seed=500,print = FALSE)
+missing <- mice::complete(missing, action=as.numeric(2))
+dataset = na.omit(missing)
+print(str(dataset))
+```
+
+### Impute Outliers 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data = dataset[,1:4] %>% outlieR::impute(flag = NULL, fill = "mean", 
+                                level = 0.1, nmax = NULL,
+                                side = NULL, crit = "lof", 
+                                k = 5, metric = "euclidean", q = 3)
+dataset = cbind(data, Species = dataset[,5])
+print(str(dataset))
+```
+
+### Normalize the Data 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+preProClean <- preProcess(x = dataset, method = c("scale", "center"))
+dataset <- predict(preProClean, dataset %>% na.omit)
+print(str(dataset))
+```
+
+
+### Scatterplot Matrix
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(GGally)
+sp = ggpairs(dataset)
+sp
+```
+
+### Scatterplot with Groups
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+transparentTheme(trans = .4)
+featurePlot(x = dataset[, 1:4], 
+            y = dataset$Species, 
+            plot = "pairs",
+            ## Add a key at the top
+            auto.key = list(columns = 3))
+```
+
+### Overlayed Density Plot
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+transparentTheme(trans = .9)
+featurePlot(x = dataset[, 1:4], 
+            y = dataset$Species,
+            plot = "density", 
+            ## Pass in options to xyplot() to 
+            ## make it prettier
+            scales = list(x = list(relation="free"), 
+                          y = list(relation="free")), 
+            adjust = 1.5, 
+            pch = "|", 
+            layout = c(4, 1), 
+            auto.key = list(columns = 3))
+```
+
+### Boxplot
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+featurePlot(x = dataset[, 1:4], 
+            y = dataset$Species, 
+            plot = "box", 
+            ## Pass in options to bwplot() 
+            scales = list(y = list(relation="free"),
+                          x = list(rot = 90)),  
+            layout = c(4,1 ), 
+            auto.key = list(columns = 2))
+```
+
+### Split the Data 
+```{r}
+index = createDataPartition(dataset[,1], p =0.80, list = FALSE)
+training = dataset[index,]
+valid = dataset[-index,]
+```
+
+
+## Train Models {.tabset}
+
+### Modeling Parameters 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+control <- trainControl(method="cv", number=10)
+metric <- c("Accuracy")
+set.seed(7)
+```
+
+### Train Models
+
+- Decision Tree 
+- Random Forest 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(7)
+fit.dt <- train(Species~., data = training, method="rpart", metric=metric, trControl=control) #decision tree
+set.seed(7)
+fit.rf <- train(Species~., data = training, method="rf", metric=metric, trControl=control, importance=T) #random forest
+```
+
+### Summary Results 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+results = resamples(list(dt= fit.dt, rf = fit.rf))
+summary(results)
+```
+
+### Summary Plots
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+dp = dotplot(results)
+dp
+bwp = bwplot(results)
+bwp
+```
+
+## Decision Tree Results {.tabset}
+
+### Summary Results
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(fit.dt$resample)
+```
+
+### Mean of Different Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.dt$results)
+```
+
+### Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.dt$resample)
+```
+
+### Predictions Results 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+predictions = predict(fit.dt, valid[,1:4])
+confusionMatrix(as.factor(predictions), reference = as.factor(valid$Species), mode = "prec_recall")
+```
+
+### Variable Importance
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+importance <- varImp(fit.dt, scale=TRUE)
+# summarize importance
+print(importance)
+# plot importance
+vi.dt = plot(importance)
+vi.dt
+```
+
+
+## Random Forest Results {.tabset}
+
+### Summary Results
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(fit.rf$resample)
+```
+
+### Mean of Different Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.rf$results)
+```
+
+### Resamples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+print(fit.rf$resample)
+```
+
+### Predictions
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+predictions = predict(fit.rf, valid[,1:4])
+confusionMatrix(as.factor(predictions), reference = as.factor(valid$Species), mode = "prec_recall")
+```
+
+### Variable Importance
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+importance <- varImp(fit.rf, scale=TRUE)
+# summarize importance
+print(importance)
+# plot importance
+vi.rf = plot(importance)
+vi.rf
+```
+
+
+## Project Summary Plots {.tabset}
+
+### Scatterplot Matrix
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+sp
+```
+
+### Training Summary Plots
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggarrange(dp, bwp, 
+          labels = c("Training Models Summary Results"),
+          ncol = 2, nrow = 1)
+```
+
+### VI Comparison Plot
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggarrange(vi.dt, vi.rf, 
+          labels = c("DT Original", 
+                     "RF Original"),
+          ncol = 2, nrow = 2)
+```
