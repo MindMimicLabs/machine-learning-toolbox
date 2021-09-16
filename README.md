@@ -15,3 +15,5 @@ A toolbox of code in R and Python to complete classical machine learning and dee
 (5) Deep Learning 
 
 (6) Reporting 
+
+(7) Project Samples 
