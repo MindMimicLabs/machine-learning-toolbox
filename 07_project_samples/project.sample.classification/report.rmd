@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r include=FALSE}
-setwd("C:/Users/jonat/Desktop/project.sample")
+setwd("C:/Users/jonat/Desktop/machine-learning-toolbox/07_project_samples/project.sample.classification")
 ```
 
 # - Load the libraries 

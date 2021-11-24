@@ -1,0 +1,179 @@
+=========================================================================
+Log Path: C:/Users/jonat/Desktop/sample.project/log/main.log
+Program Path: C:\Users\jonat\Desktop\sample.project\main.r
+Working Directory: C:/Users/jonat/Desktop/sample.project
+User Name: jonat
+R Version: 3.5.2 (2018-12-20)
+Machine: DESKTOP-7I8HD4L x86-64
+Operating System: Windows 10 x64 build 19042
+Base Packages: stats graphics grDevices utils datasets methods base
+Other Packages: logr_1.2.7 caret_6.0-86 ggplot2_3.3.3 lattice_0.20-41 NoiseFiltersR_0.1.0
+                outlieR_0.1.0 magrittr_1.5 mice_3.8.0 
+Log Start Time: 2021-11-23 19:20:29
+=========================================================================
+
+Libraries Loaded...
+
+NOTE: Log Print Time:  2021-11-23 19:20:29
+NOTE: Elapsed Time in seconds: 0.00200104713439941
+
+Data Imported...
+
+NOTE: Log Print Time:  2021-11-23 19:20:29
+NOTE: Elapsed Time in seconds: 0.0274710655212402
+
+NULL
+
+NOTE: Log Print Time:  2021-11-23 19:20:29
+NOTE: Elapsed Time in seconds: 0.00399684906005859
+
+Data Pre-processed...
+
+NOTE: Log Print Time:  2021-11-23 19:20:29
+NOTE: Elapsed Time in seconds: 0.210005044937134
+
+NULL
+
+NOTE: Log Print Time:  2021-11-23 19:20:29
+NOTE: Elapsed Time in seconds: 0.00399398803710938
+
+CART 
+
+121 samples
+  3 predictor
+  3 classes: 'setosa', 'versicolor', 'virginica' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 108, 109, 109, 109, 109, 110, ... 
+Resampling results across tuning parameters:
+
+  cp         Accuracy   Kappa     
+  0.0000000  0.9247669  0.88678571
+  0.4430380  0.7433566  0.61446429
+  0.4936709  0.3988928  0.08511905
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was cp = 0.
+
+NOTE: Log Print Time:  2021-11-23 19:20:30
+NOTE: Elapsed Time in seconds: 0.640007972717285
+
+Confusion Matrix and Statistics
+
+            Reference
+Prediction   setosa versicolor virginica
+  setosa          7          0         0
+  versicolor      0         10         1
+  virginica       0          0        11
+
+Overall Statistics
+                                          
+               Accuracy : 0.9655          
+                 95% CI : (0.8224, 0.9991)
+    No Information Rate : 0.4138          
+    P-Value [Acc > NIR] : 3.242e-10       
+                                          
+                  Kappa : 0.9473          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: setosa Class: versicolor Class: virginica
+Precision                   1.0000            0.9091           1.0000
+Recall                      1.0000            1.0000           0.9167
+F1                          1.0000            0.9524           0.9565
+Prevalence                  0.2414            0.3448           0.4138
+Detection Rate              0.2414            0.3448           0.3793
+Detection Prevalence        0.2414            0.3793           0.3793
+Balanced Accuracy           1.0000            0.9737           0.9583
+
+NOTE: Log Print Time:  2021-11-23 19:20:30
+NOTE: Elapsed Time in seconds: 0.105993032455444
+
+Decision Tree Trained/Tested...
+
+NOTE: Log Print Time:  2021-11-23 19:20:30
+NOTE: Elapsed Time in seconds: 0.0920150279998779
+
+Random Forest 
+
+121 samples
+  3 predictor
+  3 classes: 'setosa', 'versicolor', 'virginica' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 109, 109, 109, 108, 110, 108, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa   
+  2     0.9352564  0.902574
+  3     0.9435897  0.915074
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 3.
+
+NOTE: Log Print Time:  2021-11-23 19:20:31
+NOTE: Elapsed Time in seconds: 0.874991893768311
+
+Confusion Matrix and Statistics
+
+            Reference
+Prediction   setosa versicolor virginica
+  setosa         11          0         0
+  versicolor      0         14         0
+  virginica       0          1         3
+
+Overall Statistics
+                                          
+               Accuracy : 0.9655          
+                 95% CI : (0.8224, 0.9991)
+    No Information Rate : 0.5172          
+    P-Value [Acc > NIR] : 1.397e-07       
+                                          
+                  Kappa : 0.9418          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: setosa Class: versicolor Class: virginica
+Precision                   1.0000            1.0000           0.7500
+Recall                      1.0000            0.9333           1.0000
+F1                          1.0000            0.9655           0.8571
+Prevalence                  0.3793            0.5172           0.1034
+Detection Rate              0.3793            0.4828           0.1034
+Detection Prevalence        0.3793            0.4828           0.1379
+Balanced Accuracy           1.0000            0.9667           0.9808
+
+NOTE: Log Print Time:  2021-11-23 19:20:31
+NOTE: Elapsed Time in seconds: 0.0159921646118164
+
+Random Forest Trained/Tested...
+
+NOTE: Log Print Time:  2021-11-23 19:20:31
+NOTE: Elapsed Time in seconds: 0.000998973846435547
+
+Warning messages:
+1: In text.default(xy$x, xy$y + 0.5 * cxy[2L], rows[left.child],  ... :
+  "use.n." is not a graphical parameter
+2: In text.default(xy$x[leaves], xy$y[leaves] - 0.5 * cxy[2L],  ... :
+  "use.n." is not a graphical parameter
+3: In doTryCatch(return(expr), name, parentenv, handler) :
+  "use.n." is not a graphical parameter
+4: In doTryCatch(return(expr), name, parentenv, handler) :
+  "use.n." is not a graphical parameter
+5: In doTryCatch(return(expr), name, parentenv, handler) :
+  "use.n." is not a graphical parameter
+6: In doTryCatch(return(expr), name, parentenv, handler) :
+  "use.n." is not a graphical parameter
+
+NOTE: Log Print Time: 2021-11-23 19:20:31
+NOTE: Log Elapsed Time: 0.00800395011901855
+
+=========================================================================
+Log End Time: 2021-11-23 19:20:31
+Log Elapsed Time: 0 00:00:01
+=========================================================================
