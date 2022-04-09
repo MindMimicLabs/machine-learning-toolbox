@@ -1,0 +1,12 @@
+\usepackage[none]{hyphenat}
+\usepackage{longtable}
+\pagestyle{plain}
+\raggedbottom
+\let\origtable\table
+\let\origendtable\endtable
+\renewenvironment{table}[1][2] { \expandafter\origtable\expandafter[!ht] } { \origendtable }
+\let\origfigure\figure
+\let\origendfigure\endfigure
+\renewenvironment{figure}[1][2] { \expandafter\origfigure\expandafter[!ht] } { \origendfigure }
+\usepackage{caption}
+\captionsetup[table]{textfont={it}, labelfont={bf}, singlelinecheck=false, labelsep=newline}

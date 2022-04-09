@@ -1,0 +1,33 @@
+# Introduction
+
+Understanding a text's sentiment is a vital component for various interested parties in both academia and industry. 
+For instance, providing insight into a movie script's sentiment could provide hidden knowledge about the user population of a video streaming service. 
+Selecting the right types of movies for consumers is key to businesses such as Netflix and other video content providers. 
+A movie containing mainly positive or negative content can suggest a consumer's opinion towards certain types of sentiment. 
+The recommendation of movies to a user can be altered based on their preferences, providing a measure of sentiment from texts. 
+
+Past approaches focused on the formation of the input shapes rather than modifying the model to the task. 
+The bag of words approach was a commonly accepted practice, but for document-level classification tasks, a technique utilizing word vector spaces tends to find issues that arise quickly [@Moraes2013DocumentlevelSC]. 
+The modeling of language is not as simple when more complex representations are introduced into the problem space. 
+Noise is contained in the language no matter the form. 
+Normally the text is very sparse at the document level since a document only contains a small portion of the population's vocabulary [@Zhang2018DeepLF]. 
+Short or long shapes, the texts are going to contain noise that cannot be avoided.
+Deep models need to adjust to the weights applied throughout the network's layers to learn deeper features throughout the network's credit assignment pathways (CAPs). 
+Not all representations should adjust the model weights significantly unless the input warrants the adaptative weights to scale based on the incoming batch's variant. 
+The PTCN is implemented assuming that most of the noise in language samples is primarily junk data that helps transfer information when humans talk in a socially acceptable manner. 
+In-text classification tasks the importance of transferring information in the same manner as a human is not relevant. 
+The texts are processed to form representations of language with removed noise.
+The text's sentiment is either positive or negative sentiment.
+The PTCN adjusts the kernels' initialization and regulation to optimally recognize the best weights to apply to an incoming batch of inputs to significantly alter the model's learning to the predictors' current dimensions. 
+The highly sparse nature of the language utilized within texts is difficult to adjust to; however, the adaptability of the PTCN to the structure of the inputs helps identify latent patterns throughout the samples. 
+The model's adaptable nature tackles high variance in the input's dimensions by allowing adjustment to the weights based on the current inputs while training. 
+Embedding the word vector spaces into the PTCN allows the model to extract features that help infer an accurate decision. 
+Adjusting the convolutional layers to extract features under controlled but adaptable parameters produces an accurate prediction of sentiment from both short and long text samples and is comparable to past approaches. 
+
+Promoting a network only to recognize significant features that help class samples of highly sparse texts based on their sentiment provides a valuable advantage in many situations.
+The simple tokenized word vector spaces are perfect representations of language to feed a deep neural network. The shape represents the purest form of the sampled texts, containing minimal noise. 
+The set conditions allow the PTCN to capture the most relevant features for the tested sentiment classification tasks. 
+
+The experiments express the ability of the PTCN in recognizing sentiment from both short and long text inputs. 
+A corpus of movie scripts reflects the long texts, and the short texts are a corpus of tweets. 
+Being able to perform well on both types of input dimensions expresses the PTCN capabilities to scale it's learning to inputs as they are fed through the network layers. 

@@ -1,0 +1,32 @@
+---
+title: 'PTCN: A Deep Learning Neural Network for Sentiment Classification of Texts'
+subtitle: 'Predict Text Classification Network (PTCN)'
+date: "`r Sys.Date()`"
+knit: bookdown::render_book
+affiliation:
+  institution-columnar: true
+  institution:
+    - name: Harrisburg University of Science and Technology, 
+      department: Department of Analytics and Data Science
+      location: Harrisburg, PA
+      mark: 1
+      author:
+        - name: Jonathan Wayne Korn
+          email: jkorn@harrisburgu.edu*
+bibliography: '../references/_references.bib'
+link-citations: yes
+url: 'https\://github.com/MindMimicLabs/classification-congressional-votes'
+github-repo: MindMimicLabs/classification-congressional-votes
+keywords: [
+  'Deep Learning (DL)',
+  'Convolutional Neural Networks (CNNs)',
+  'Long-Short-Term Memory Neural Networks (LSTMs)',
+  'Natural Language Processing (NLP)',
+  'Sentiment Classification']
+abstract: |
+  `r paste(readLines("_abstract.rmd"), collapse = '\n  ')`
+---
+```{r include=FALSE}
+options(tinytex.verbose = TRUE)
+```
+

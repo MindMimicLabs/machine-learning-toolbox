@@ -1,0 +1,18 @@
+# Conclusion and Discussion
+
+The PTCN is capable of performing comparably to past approaches in the binary sentiment classification of texts. 
+The unique architecture of the PTCN allows it to mimic adaptable learning. 
+The PTCN expressed high accuracies on the movie script experiment.
+The PTCN is able to perform comparably to the benchmark models in the twitter Airline and IMBD sentiment experiments. 
+However, the PTCN did slightly perform higher than the benchmark model using the Twitter Airline dataset, but only on one fold and by a very small difference. 
+The IMBD sentiment experiment's benchmark model outperformed the PTCN; however, the PTCN's performance can be improved by introducing new samples. 
+
+Instead of maintaining the model's learning in a static state, it is best to set the model to learn optimally from the current inputs the model is processing. 
+It is important to manage the regularization utilized with the PTCN, which is identified through the hyper tuning sessions. 
+The best parameters for the final implementation of the PTCN state are required to produce accurate and reliable results. 
+The folds that express low performance levels are most likley iterations of the model which did not control the exploration of the model successively. 
+It does not seem to be a problem for the successful implmentation of the PTCN. 
+
+In the future, the plan is to add an ensemble process into the PTCN and develop the PTCN-2, which will take adavantage of the hyper-tuning sessions and store the various model states to ensemble into a final model state. 
+Using ensembled model state will provide a more robust model that is better at generalizing. 
+

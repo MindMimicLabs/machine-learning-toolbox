@@ -1,0 +1,8 @@
+bookdown::pdf_book:
+    base_format: rticles::ieee_article
+    toc: no
+    keep_tex: no
+    fig_height: 3
+    includes:
+        in_header: _preamble.tex
+   

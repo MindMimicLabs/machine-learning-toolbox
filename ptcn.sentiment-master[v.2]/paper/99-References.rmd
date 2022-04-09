@@ -1,0 +1,6 @@
+# References
+
+---
+nocite: | 
+  @github, @rlanguage, @rstudio
+...

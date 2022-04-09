@@ -1,0 +1,200 @@
+# Results
+
+The following section details three experiments using the PTCN to predict text sentiment on a binary level, positive and negative, at a document level.  
+
+## Movie Script Sentiment 
+
+The dataset utilized in the first experiment using the PTCN contains 8280 movie script samples. 
+Each sample includes the movie title and accompanying movie script text. 
+The movie script text is processed to remove noise. 
+Pre-processing the text includes converting all lettering to lower casing, removing stop words, special characters, NA values, punctuation, numbers, and whitespace from the text.
+After the text is pre-processed, the sentiment of each movie script needs to be measured. 
+Each document using the pre-processed form is set to capture each individual word's polarity score and then the document's overall polarity measurement. 
+The polarity measures are conditionally converted into binary labels representing positive and negative sentiment.
+
+Since DL models are susceptible to forming bias when trained on data that is not equally distributed across sample data, modeling requires a reduction in the sample size. 
+The initial count of positive and negative sentiment labels is shown in Table \@ref(tab:confusion).
+Unequal distribution of the classes will hinder the PTCN in recognizing the most significant features. 
+Balancing the number of positive samples and negative samples is key to mitigate the PTCN from learning bias features. 
+
+```{r confusion, echo = F}
+data <- matrix(c(3828,4452), ncol = 1, byrow = T)
+dimnames(data) <- list(Classes = c(0, 1))
+knitr::kable(
+  data,
+  booktabs = TRUE,
+  caption = 'Number of Positive and Negative sentiment Labels ~ Movie Scripts'
+)
+```
+
+The new count of positive and negative sentiment labels results in Table \@ref(tab:confusion1).
+
+```{r confusion1, echo = F}
+data <- matrix(c(3800,3800), ncol = 1, byrow = T)
+dimnames(data) <- list(Classes = c(0, 1))
+knitr::kable(
+  data,
+  booktabs = TRUE,
+  caption = 'Equal Number of Positive and Negative sentiment Labels ~ Movie Scripts'
+)
+```
+
+Now the next process changes for the hyper-tune modeling training sessions and the best model parameter training session.
+Each of the hyper-tuning sessions and best model parameter sessions differ in the implementation.
+The hyper-tuning modeling session use no cross-validation and a fixed training, validation, and evaluation split size. 
+For instance, in the experiment, the training samples consisted of 7500 samples, and evaluation consisted of 100 samples. 
+The hyper-tune sessions' training sample is further split into a randomized split of 80% for training and 20% for validation.
+After, hyper-tuning sessions the best parameters are identified, and the best model is trained using $10$-fold cross-validation with randomized samples of 80% for training and 20% for evaluating. 
+The data's training portion is further split into another randomized sampling of an 80% split for training, and 20% split the validation dataset.
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+fold1 = as.numeric(c(83.16,83.25,83.03,83.14))
+fold2 = as.numeric(c(72.76,73.57,71.05,72.29))
+fold3 = as.numeric(c(82.69,82.74,82.63,82.69))
+fold4 = as.numeric(c(80.46,80.50,80.39,80.45))
+fold5 = as.numeric(c(83.82,83.82,83.82,83.82))
+fold6 = as.numeric(c(82.11,82.19,81.97,82.08))
+fold7 = as.numeric(c(74.54,74.97,73.68,74.32))
+fold8 = as.numeric(c(74.54,74.00,75.66,74.82))
+fold9 = as.numeric(c(83.03,83.03,83.03,83.03))
+fold10 = as.numeric(c(50.00,50.00,50.00,50.00))
+data <- data.frame(rbind(fold1,fold2,fold3,fold4,fold5,
+                   fold6,fold7,fold8,fold9,fold10
+))
+colnames(data) = c('accuracy','precision','recall','F1')
+```
+
+The PTCN using 10-fold cross validation averaged `r mean(data[,1])`% evaluation accuracy with a standard deviation of `r round(sd(data[,1]),2)`. 
+The best model performed at `r max(data[,1])`% evaluation on fold `r which.max(data[,1])` as depicted below in in Figure \@ref(fig:fig1).
+The minimum evaluation accuracy is reported at `r min(data[,1])`% on fold `r which.min(data[,1])`. 
+The remaining folds performance measures are depicted in \@ref(tab:performance). 
+The learning curve in the \@ref(fig:fig1) suggests that the parameters are well trained. 
+Notice that the learning curve breaks at one point. 
+The consumption of time is controlled using early stopping mechanisms are implemented in the best model's training parameters, which monitor the validation loss of the model over-time for improvement. 
+If the model's loss does not improve over ten epochs, it does not continue to train and ends its learning at the current state.
+
+```{r fig1, echo = F, fig.cap = 'PTCN performance on fold 3 ~ Movie Scripts'}
+library(png)
+library(grid)
+img <- readPNG("./pictures/figure12.png")
+grid.raster(img)
+```
+
+```{r performance, echo = F}
+knitr::kable(
+  data,
+  booktabs = TRUE,
+  caption = 'PTCN evaluation of all folds ~ Movie Scripts'
+)
+```
+
+The training/validation plots indicate that each follows a similar pattern, which suggests that the problem of overfitting could easily be handled. 
+Even though the evaluation accuracy shows significant variance across the folds, it provides evidence of the algorithm's robustness [@jkmn]. 
+No matter the input of movie script texts in the training, validation, and evaluation datasets, the algorithm performed well. 
+
+Comparing the PTCN to other approaches tackling the problem of sentiment classification using text is further explored in two different experiments. 
+The experiments include the binary sentiment classification using the Twitter Airline dataset and IMBD Movie Review dataset.
+Each dataset is studied by past approaches and provides a benchmark to compare the PTCN's performance.  
+
+## Twitter Airline Sentiment 
+
+The Twitter Airline dataset in its original state contains $14640$ text samples labeled with a sentiment score. 
+Each sample tweets are pre-processed using the techniques mentioned above discussed in \@ref(method-and-materials). 
+The same sentiment process is not performed on the Tweets as the data provided comes with the sentiment classified. 
+Many of the samples are a neutral sentiment score of $0$ and are discarded. 
+After pre-processing and ensuring an equal distribution of labels, the sample size decreases to 4720 observations of tweets from various Twitter users representing positive and negative sentiment. 
+
+The baseline performance is an RNN at 90.45% and a close second the CNN at a 90.37% accuracy rate [@Dang2020SentimentAB]. 
+The PTCN's comparable performance is shown in Table \@ref(tab:performance1).
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+fold1 = as.numeric(c(52.97,53.02,52.12,52.66))
+fold2 = as.numeric(c(88.56,88.72,88.35,88.54))
+fold3 = as.numeric(c(84.22,84.29,84.11,84.20))
+fold4 = as.numeric(c(88.98,88.82,89.19,89.01))
+fold5 = as.numeric(c(87.92,88.09,87.71,87.90))
+fold6 = as.numeric(c(89.72,89.81,89.62,89.71))
+fold7 = as.numeric(c(87.71,87.55,87.92,87.74))
+fold8 = as.numeric(c(89.09,89.17,88.98,89.08))
+fold9 = as.numeric(c(90.89,90.89,90.89,90.89))
+fold10 = as.numeric(c(62.39,62.53,61.86,62.19))
+data2 <- data.frame(rbind(fold1,fold2,fold3,fold4,fold5,
+                   fold6,fold7,fold8,fold9,fold10
+))
+colnames(data2) = c('accuracy','precision','recall','F1')
+```
+
+```{r fig2, echo = F, fig.cap = 'PTCN performance on fold 9 ~ Twitter Airline'}
+library(png)
+library(grid)
+img <- readPNG("./pictures/figure13.png")
+grid.raster(img)
+```
+
+```{r performance1, echo = F}
+knitr::kable(
+  data2,
+  booktabs = TRUE,
+  caption = 'PTCN evaluation of all folds ~ Twitter Airline'
+)
+```
+
+
+The implementation of the model using $10$-fold cross-validation averaged `r mean(data2[,1])`% evaluation accuracy with a standard deviation of `r round(sd(data2[,1]),2)`. 
+The best model performed at `r max(data2[,1])`% evaluation on fold `r which.max(data2[,1])` as depicted below in in Figure \@ref(fig:fig2).
+The minimum evaluation accuracy is reported at `r min(data2[,1])`% on fold `r which.min(data2[,1])`. 
+The remaining folds performance measures are depicted in \@ref(tab:performance1). 
+The learning curve in the figure above suggests that the parameters are well trained. 
+The folds do not express significant variance as only fold 1 and fold 10 seem to perform at a lower rate. 
+All other folds performed at a stable and higher performance rate. 
+The results suggest that the PTCN performed well at the desired task.
+
+## IMBD Sentiment 
+
+To expand on the comparable performance of the PTCN performing sentiment analysis, the model is trained on the IMBD movie review task. 
+The original dataset contains $50000$ observations and the binary labels of sentiment for each text.
+Pre-processing is the same performed as discussed in \@ref(method-and-materials). 
+After, pre-processing the samples are still $50000$ due to the fact that the original sample provides an equal representation of sentiment labels.
+The baseline performance of a model on the IMBD is 89.37% established by [@Zulqarnain2020AnID]. 
+The PTCN's comparable performance is shown in Table \@ref(tab:performance2).
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+fold1 = as.numeric(c(85.81,85.89,85.70,85.79))
+fold2 = as.numeric(c(86.99,86.86,87.16,87.01))
+fold3 = as.numeric(c(86.34,86.33,86.36,86.34))
+fold4 = as.numeric(c(86.39,86.35,86.44,86.40))
+fold5 = as.numeric(c(86.14,86.08,86.22,86.15))
+fold6 = as.numeric(c(86.47,86.43,86.52,86.48))
+fold7 = as.numeric(c(86.29,86.33,86.24,86.28))
+fold8 = as.numeric(c(85.94,85.95,85.92,85.94))
+fold9 = as.numeric(c(86.60,86.48,86.76,86.62))
+fold10 = as.numeric(c(85.57,85.56,85.58,85.57))
+data3 <- data.frame(rbind(fold1,fold2,fold3,fold4,fold5,
+                   fold6,fold7,fold8,fold9,fold10
+))
+colnames(data3) = c('accuracy','precision','recall','F1')
+```
+
+```{r fig3, echo = F, fig.cap = 'PTCN performance on fold 2 ~ IMBD Movie Reviews'}
+library(png)
+library(grid)
+img <- readPNG("./pictures/figure14.png")
+grid.raster(img)
+```
+
+```{r performance2, echo = F}
+knitr::kable(
+  data3,
+  booktabs = TRUE,
+  caption = 'PTCN evaluation of all folds ~ IMBD Movie Reviews'
+)
+```
+
+The implementation of the model using $10$-fold cross-validation averaged `r mean(data3[,1])`% evaluation accuracy with a standard deviation of `r round(sd(data3[,1]),2)`. 
+The best model performed at `r max(data3[,1])`% evaluation on fold `r which.max(data3[,1])` as depicted below in in Figure \@ref(fig:fig3).
+The minimum evaluation accuracy is reported at `r min(data3[,1])`% on fold `r which.min(data3[,1])`. 
+The remaining folds performance measures are depicted in \@ref(tab:performance1). 
+The learning curve in Figure \@ref(fig:fig3) suggests that the parameters are well trained. 
+The folds do not express significant variance as only fold 1, fold 8, and fold 10 seem to perform at a lower level. 
+All other folds performed at a stable and higher level. 
+The results suggest that the PTCN performed well at the desired task.

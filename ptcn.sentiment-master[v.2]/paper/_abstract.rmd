@@ -1,0 +1,9 @@
+This paper aims to expand upon the novel solution's research known as the *"Predict Text Classification Network"* *(PTCN)*.
+The PTCN, formerly developed to tackle the binary classification of Congressional Roll Call Votes from legislative texts, is tested on the binary classification of sentiment from texts.
+The PTCN uses an adaptable hybrid deep learning algorithm which contains the structure of a C-LSTM integrating a convolutional neural network *(CNNs)* and long-short-term memory neural networks *(LSTMs)*. 
+Adaptable parameters in the PTCN's DL architecture allow the network to adjust to various text classification tasks. 
+The PTCN expressed success in accurately predicting the binary classification of texts with varying dimensions [@jkmn].
+The PTCN is tested on three samples of texts reflecting different representations of language to further reflect the adaptability of the PTCN to various inputs and generalization to other text classification problems. 
+The first sample is movie scripts, the second is Twitter Airlines tweets, and the third is the IMBD movie reviews dataset. 
+The PTCN average accuracy for each sample is 76.71%, 82.24%, 86.25%, respectively. 
+The adaptable features contained in the PTCN express capabilities to reliably produce accurate results for sentiment classification tasks at the document level compared to past approaches. 

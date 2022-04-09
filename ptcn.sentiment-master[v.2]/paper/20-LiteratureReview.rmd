@@ -1,0 +1,90 @@
+# Literature Review
+
+## Sentiment Classification 
+
+Sentiment classification is difficult to address due to the various domains that can be represented in the problem. 
+In 2011, authors introduced a deep learning approach to adapt to sentiment classification tasks that are large-scale [@Glorot2011DomainAF]. 
+Expanding the domain representation in training data is difficult to collect, limiting the ability to train for all of them. 
+Using a deep learning approach allows the model to adapt to the change in domains effectively. 
+However, the approach relies on constructing high-level feature representations using the deep learning approach [@Glorot2011DomainAF]. The model's focus is not to classify sentiment from the text but rather on input shaping. 
+
+By 2013, researchers were attempting document-level sentiment analysis using a bag of words approach. 
+That data in the experiment is not balanced for training, ensuring that the sample contains bias. 
+However, in the study, they showed an artificial neural network (ANN) produced the most accurate results. 
+Using 3000 terms in their bag of words, the model expressed an 86.5% accuracy rate on the movie review dataset [@Moraes2013DocumentlevelSC].
+Even with the data imbalance, the ANN showed a stable precision and recall [@Moraes2013DocumentlevelSC]. 
+The length of the movie reviews most likely helped the stability of the model. 
+A deep learning system developed in 2014 addressed the sentiment classification of message-level Tweets known as "Cooooll". 
+The method focuses on the shaping of the inputs into *"...sentiment-specific word embeddings (SSWE) features ..."* [@Tang2014CoooolllAD].
+Note the features are hand-crafted [@Tang2014CoooolllAD]. 
+Hand-crafting features are a deceptive practice. The features selected to address the task may include more bias than features automatically recognized from a more pure representation of the language. 
+However, distributed representations of both sentences and documents were introduced in 2014 to help mitigate the weakness of the bag of words approach [@Le2014DistributedRO]. Most importantly, the research shows that a paragraph vector outperforms a bag of words model. 
+
+In 2015, researchers showed that deep CNNs are capable of addressing sentiment analysis problems [@Ouyang2015SentimentAU]. 
+The model uses a word2vec representation for the input in their modeling. 
+The team of researchers claims that the vector representation helps initialize good parameters [@Ouyang2015SentimentAU]. 
+As well, another team created the UNITN deep CNN targeted for sentiment classification on Twitter texts. 
+The authors stress the importance of initializing the weights of the network [@Severyn2015UNITNTD]. 
+To address the issue, the authors implement an unsupervised neural language model to help initialize word embeddings [@Severyn2015UNITNTD]. 
+The features recognized in the unsupervised process are used only to initialize the model. In 2015, a team of researchers developed a CNN gated recurrent neural network that outperformed all current methods on the sentiment classification at the document level, reporting an accuracy of 67.6% on the Yelp 2014 dataset [@Tang2015DocumentMW].
+
+In 2016, a team of researchers experimented with a neural network in sentiment classification, and results showed promising performance [@Ren2016ContextSensitiveTS]. 
+However, the approach is not an effective one for practical purposes. 
+Texts samples often are not simple representations of language such as social media posts but more complete language expressions.
+The more complex the contextual features, the more bias is likely to develop and become increasingly difficult to combat. 
+The language on social media constantly transforms, making it challenging to adapt a simple neural network to more complex representation texts.
+One research team reported an accuracy of 46.2% on sentiment classification using a Bidirectional Convolutional Long-Short Term Memory Network (B-CLSTM) [@Xu2016CachedLS]. 
+The B-CLSTM outperformed other neural networks in the experiment. 
+The C-LSTM produced the most comparable accuracy of 42.10% [@Xu2016CachedLS]. 
+
+A method of divide and conquer in 2017 is introduced for sentiment classification using a Bidirectional LSTM-CRF and CNN model to adjust to how sentences represent sentiment [@Chen2017ImprovingSA].
+Another discovery in 2017 included a group discovered that utilizing word embeddings with tuning performed better than traditional feature selection methods [@Uysal2017SentimentCF]. 
+Using finely tuned word embeddings performed at an accuracy of 74.7%, as the model with simple word embedding performed at 71.5% [@Uysal2017SentimentCF]. 
+The experiment results confirm that a highly tuned feature selection process increases the accuracy of the deep learning model. 
+
+Later in 2018, a group of researchers expressed success using a deep neural network for sentiment classification [@Ilmania2018AspectDA]. 
+The approach follows a unique process that preprocesses the input text into a word vector representation, which is utilized to classify sentiment from the input [@Ilmania2018AspectDA]. 
+Assigning a word, sentence, and paragraph to a feature tends to overemphasize a simplification of the text's representation. 
+The inputs' spatial and temporal dimensions must alter throughout the text classifiers' training process to be better generalized. 
+
+In 2019, CNN's expressed success in addressing the issue of automatically implementing sentiment classification [@Kim2019SentimentCU]. 
+Here, the researchers expressed that the CNN performs relatively well on larger texts [@Kim2019SentimentCU].  
+
+Recently in 2020, a team of researchers introduced a hybrid deep learning model for sentiment classification. 
+The experiment expresses a combination of word embedding techniques and different learning methods, including LSTM, GRU, BiLSTM, and CNN [@Salur2020ANH]. 
+Interestingly, the features are extracted using the hybrid method using the different deep learning word embedding techniques. 
+The features are utilized to classify the sentiment of the texts [@Salur2020ANH]. 
+The hybrid approach expresses better results than the prior methods deployed for sentiment classification [@Salur2020ANH]. 
+The architecture of the hybrid network connects a CNN and BiLSTM network. 
+A comparative study from 2020 helps shed light on the top-performing sentiment analysis methods, which suggests that deep learning techniques are the best approach [@Dang2020SentimentAB]. 
+On the Tweets Airline dataset for binary sentiment classification, CNN reported 90.37% accuracy, and the recurrent neural network (RNN) reported 90.45% [@Dang2020SentimentAB]. 
+The CNN and RNN reported 80.06% and 82.82% on the Sentiment 140 for binary sentiment classification [@Dang2020SentimentAB]. 
+The top-performing methods tested on the IMBD Movie review dataset is the CNN and RNN, reporting 86.07% and 86.68%, respectively. 
+
+More recently, a comprehensive study showed that deep learning algorithms performed well on multi-class problems as well [@Seo2020ComparativeSO]. 
+The study tested multiple types of deep learning algorithms, including CNN, RNN, LSTM, Bidirectional LSTM, Gated Recurrent Units (GRU), and Bidirectional GRU.
+The models were tested using 12 different datasets. 
+Ten of the datasets are available at [@amazondata]. 
+The Bidirectional LSTM performed the best out of the study [@Seo2020ComparativeSO]. 
+Even though the experiment shows promising results, the study only performs the testing on word and character level inputs. CNN-BiLSTM with character plus FastText embedding produces accurate results, discovered in 2020 using a Turkish corpus [@Salur2020ANH]. Labeled the *'M-Hybrid'*, the model performed at an accuracy of 82.14%. Compared to a model performed on the same dataset using another approach, the best research reached an accuracy of 69%; all other experiments were lower performance [@Zhang2015CharacterlevelCN] [@chaitjo] [@Kim2016CharacterAwareNL]. 
+
+More impressive is the encoder GRU or E-TGRU and the Two-State Gated Recurrent Unit or TGRU, developed by a team of researchers in 2020, reported achieving an 89.37% accuracy using the IMBD dataset [@Zulqarnain2020AnID].
+
+## Deep Text Classification
+
+The ability to store information over long lags of time using an LSTM expresses successful results; since it can recognize patterns in *"... local space and time ..."* [@Hochreiter1997LongSM]. 
+Researchers say that the model also trained much faster and learned much more than other methods, including *"... real-time recurrent learning, backpropagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking ..."* [@Hochreiter1997LongSM].
+
+Often classification solutions require human-designed features [@Lai2015RecurrentCN]. 
+A recurrent neural network (RNN) shows reliable performance for text classification without the features being created by humans. 
+The automatic recognition of patterns from the word representations and max-pooling layers helped the RNN extract key components leading to specific categories. 
+
+Hybrid deep neural networks have shown success using text inputs to solve binary classification tasks. 
+Convolutional and Long-short-term-memory neural networks by Zhou et al., 2015 were developed and showed promising results for hybrid architecture on the classification of text problems. 
+The authors of "A C-LSTM Neural Network for Text Classification" express the capabilities of the network at understanding language [@zhou2015c]. 
+The combination of the two types of networks provides the strength of both architectures. 
+
+In 2019, a team of researchers took advantage of convolutional recurrent neural networks to tackle text classification tasks [@Wang2019ConvolutionalRN]. 
+Their experiments showed that the method of using a C-LSTM achieves better success than other networks. 
+Many of the other networks previously explored were based on only a single network [@Wang2019ConvolutionalRN]. 
+Single networks consisted of the following layers: an embedding layer, a convolutional layer, a max-pooling layer, a concatenate layer, an LSTM layer, and an FC layer. 
