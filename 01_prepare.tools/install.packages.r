@@ -295,3 +295,7 @@ if (!require("reticulate")) {
   install.packages('./packages/reticulate-1.15.tar.gz', repos = NULL, type ='source')
   library(reticulate)
 }
+if (!require("dict ")) {
+  if (!require("devtools")) install.packages("devtools")
+  devtools::install_github("mkuhn/dict")
+}
